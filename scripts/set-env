@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+export GO111MODULE="on"
+export ROOT_DIR=$(git rev-parse --show-toplevel)
+export BUILD_DIR="${ROOT_DIR}/build"
+export SERVER_SRC_DIR="${ROOT_DIR}/server/src"
+export LOADTEST_SRC_DIR="${ROOT_DIR}/loadtest/src"
+export LINUX_SERVER_BIN="${BUILD_DIR}/server-linux"
+export DARWIN_SERVER_BIN="${BUILD_DIR}/server-darwin"
+export LOADTEST_BIN="${BUILD_DIR}/loadtest"
+export DEMO_SERVER_INSTANCE_NAME="women-who-go-demo"
+export DEMO_ZONE="us-central1-a"

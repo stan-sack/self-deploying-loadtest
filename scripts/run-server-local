@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# change to current dir
+cd "$(dirname "$0")"
+
+# load the env variables
+. set-env
+
+# build the server
+go build -o ${DARWIN_SERVER_BIN} ${SERVER_SRC_DIR}
+
+# run the server
+${DARWIN_SERVER_BIN}

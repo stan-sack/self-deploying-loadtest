@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+# change to current dir
+cd "$(dirname "$0")"
+
+# load the env variables
+. set-env
+
+# Init temp variables
+PROXYPID=""
+# LOADTESTPID=""
+PORT=8001
+
+# this just kills the kubectl proxy process
+trap cleanup ERR EXIT
+cleanup() {
+    if [ -n "$PROXYPID" ]; then
+        kill $PROXYPID
+    fi  
+
+    # if [ -n "$LOADTESTPID" ]; then
+    #     kill $LOADTESTPID
+    # fi    
+}
+
+# build the loadtest bin
+go build -o ${LOADTEST_BIN} ${LOADTEST_SRC_DIR}
+
+# this just loops and waits until the kubectl proxy is running
+wait_for_service_ready()
+{
+    local PORT_NUMBER=$PORT
+    for i in $(seq 10); do curl localhost:${PORT}/ready > /dev/null 2>&1 && break || sleep 1; done
+}
+
+
+# start 
+kubectl proxy --port=$PORT > /dev/null 2>&1 & PROXYPID=$!
+wait_for_service_ready
+${LOADTEST_BIN} "$@"
+

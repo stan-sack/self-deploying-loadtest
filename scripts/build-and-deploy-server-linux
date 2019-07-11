@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# change to current dir
+cd "$(dirname "$0")"
+
+# load the env variables
+. set-env
+
+# cross compile the server for linux
+env GOOS=linux GOARCH=amd64 go build -o ${LINUX_SERVER_BIN} ${SERVER_SRC_DIR}
+
+# upload the binary
+gcloud compute ssh ${DEMO_SERVER_INSTANCE_NAME} --command 'sudo supervisorctl stop all'
+gcloud compute scp  ${LINUX_SERVER_BIN} ${DEMO_SERVER_INSTANCE_NAME}:~/ --zone ${DEMO_ZONE}
+gcloud compute ssh ${DEMO_SERVER_INSTANCE_NAME} --command 'sudo supervisorctl start all'     
