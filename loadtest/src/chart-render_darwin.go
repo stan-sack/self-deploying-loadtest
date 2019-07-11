@@ -12,6 +12,7 @@ func (cr *gnuChartRenderer) Start() {
 	debug := false
 
 	p, err := gnuplot.NewPlotter(fname, persist, debug)
+	p.CheckedCmd("set term qt noraise")
 	if err != nil {
 		panic(err)
 	}
